@@ -72,7 +72,7 @@ export default function Navbar() {
 
           <div className="flex items-center gap-2">
             <Link href="/settings" className="text-sm hover:underline" style={{ color: "#8a8e3a" }}>
-              {user.display_name}
+              {user.real_name || user.display_name}
             </Link>
             <button
               onClick={() => {

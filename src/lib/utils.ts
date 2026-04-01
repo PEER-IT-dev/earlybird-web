@@ -43,4 +43,6 @@ export const MEMBER_TYPE_LABELS: Record<string, string> = {
   earlybird: "일찍새",
   super_earlybird: "쌉일찍새",
   member: "멤버",
+  manager: "관리새",
+  leader: "대장새",
 };

@@ -121,6 +121,26 @@ export default function AdminPage() {
                     >
                       멤버
                     </button>
+                    <button
+                      onClick={() => setMemberType(m.id, "manager")}
+                      className={`px-2 py-1 rounded text-xs ${
+                        m.member_type === "manager"
+                          ? "bg-yellow-200 text-yellow-800"
+                          : "border hover:bg-gray-100"
+                      }`}
+                    >
+                      관리새
+                    </button>
+                    <button
+                      onClick={() => setMemberType(m.id, "leader")}
+                      className={`px-2 py-1 rounded text-xs ${
+                        m.member_type === "leader"
+                          ? "bg-orange-200 text-orange-800"
+                          : "border hover:bg-gray-100"
+                      }`}
+                    >
+                      대장새
+                    </button>
                   </td>
                 </tr>
               ))}

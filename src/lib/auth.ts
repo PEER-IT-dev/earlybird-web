@@ -1,7 +1,8 @@
 export interface UserInfo {
   id: string;
   display_name: string;
-  member_type: "earlybird" | "super_earlybird" | null;
+  real_name: string | null;
+  member_type: "earlybird" | "super_earlybird" | "manager" | "leader" | "member" | null;
   is_admin: boolean;
   profile_image: string | null;
 }

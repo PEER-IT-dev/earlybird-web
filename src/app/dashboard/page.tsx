@@ -7,6 +7,7 @@ import StatusBadge from "@/components/StatusBadge";
 import { apiFetch } from "@/lib/api";
 import { getUser, isLoggedIn } from "@/lib/auth";
 import { formatMinutes, formatTime, MEMBER_TYPE_LABELS } from "@/lib/utils";
+import NicknameModal from "@/components/NicknameModal";
 
 interface MyAttendance {
   date: string;
@@ -33,6 +34,7 @@ export default function DashboardPage() {
   const [team, setTeam] = useState<TeamMember[]>([]);
   const [loading, setLoading] = useState(true);
   const [checkingOut, setCheckingOut] = useState(false);
+  const [showNicknameModal, setShowNicknameModal] = useState(false);
   const user = getUser();
 
   useEffect(() => {
@@ -41,6 +43,9 @@ export default function DashboardPage() {
       return;
     }
     loadData();
+    if (user?.display_name?.startsWith("user_")) {
+      setShowNicknameModal(true);
+    }
   }, [router]);
 
   const loadData = async () => {
@@ -87,6 +92,12 @@ export default function DashboardPage() {
 
   return (
     <>
+      {showNicknameModal && (
+        <NicknameModal onComplete={() => {
+          setShowNicknameModal(false);
+          window.location.reload();
+        }} />
+      )}
       <Navbar />
       <main className="max-w-3xl mx-auto px-4 py-8 space-y-6">
         {/* 오늘 날짜 */}
@@ -95,7 +106,7 @@ export default function DashboardPage() {
             {todayStr}
           </h1>
           <p style={{ color: "#a0a44e" }}>
-            {user?.display_name}님
+            {user?.real_name || user?.display_name}님
             {user?.member_type
               ? ` · ${user.member_type === "super_earlybird" ? "⚡" : "🌱"} ${MEMBER_TYPE_LABELS[user.member_type]}`
               : " · 멤버 등록 대기중"}
