@@ -111,6 +111,16 @@ export default function AdminPage() {
                     >
                       쌉일찍새
                     </button>
+                    <button
+                      onClick={() => setMemberType(m.id, "member")}
+                      className={`px-2 py-1 rounded text-xs ${
+                        m.member_type === "member"
+                          ? "bg-gray-300 text-gray-800"
+                          : "border hover:bg-gray-100"
+                      }`}
+                    >
+                      멤버
+                    </button>
                   </td>
                 </tr>
               ))}

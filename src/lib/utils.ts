@@ -42,4 +42,5 @@ export const STATUS_LABELS: Record<string, string> = {
 export const MEMBER_TYPE_LABELS: Record<string, string> = {
   earlybird: "일찍새",
   super_earlybird: "쌉일찍새",
+  member: "멤버",
 };
