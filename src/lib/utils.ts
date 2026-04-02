@@ -46,3 +46,11 @@ export const MEMBER_TYPE_LABELS: Record<string, string> = {
   manager: "관리새",
   leader: "대장새",
 };
+
+export const MEMBER_TYPE_ICONS: Record<string, string> = {
+  earlybird: "🌱",
+  super_earlybird: "⚡",
+  member: "🌱",
+  manager: "💻",
+  leader: "👑",
+};

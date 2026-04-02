@@ -6,7 +6,7 @@ import Navbar from "@/components/Navbar";
 import StatusBadge from "@/components/StatusBadge";
 import { apiFetch } from "@/lib/api";
 import { getUser, isLoggedIn } from "@/lib/auth";
-import { formatMinutes, formatTime, MEMBER_TYPE_LABELS } from "@/lib/utils";
+import { formatMinutes, formatTime, MEMBER_TYPE_LABELS, MEMBER_TYPE_ICONS } from "@/lib/utils";
 import NicknameModal from "@/components/NicknameModal";
 
 interface MyAttendance {
@@ -108,7 +108,7 @@ export default function DashboardPage() {
           <p style={{ color: "#a0a44e" }}>
             {user?.real_name || user?.display_name}님
             {user?.member_type
-              ? ` · ${user.member_type === "super_earlybird" ? "⚡" : "🌱"} ${MEMBER_TYPE_LABELS[user.member_type]}`
+              ? ` · ${MEMBER_TYPE_ICONS[user.member_type] || "🌱"} ${MEMBER_TYPE_LABELS[user.member_type]}`
               : " · 멤버 등록 대기중"}
           </p>
         </div>
@@ -161,7 +161,7 @@ export default function DashboardPage() {
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-lg">
-                      {m.member_type === "super_earlybird" ? "⚡" : "🌱"}
+                      {MEMBER_TYPE_ICONS[m.member_type] || "🌱"}
                     </span>
                     <div>
                       <p className="font-medium text-sm" style={{ color: "#4a4e1c" }}>
