@@ -37,35 +37,35 @@ export default function AttendanceGrid({ data, dates }: AttendanceGridProps) {
   };
 
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full border-collapse text-sm">
+    <div className="overflow-x-auto -mx-2 sm:mx-0">
+      <table className="min-w-full border-collapse text-xs sm:text-sm whitespace-nowrap">
         <thead>
           <tr className="bg-gray-50">
-            <th className="border px-3 py-2 text-left sticky left-0 bg-gray-50 z-10 min-w-[120px]">
+            <th className="border px-2 sm:px-3 py-2 text-left sticky left-0 bg-gray-50 z-10 min-w-[70px] sm:min-w-[120px]">
               이름
             </th>
-            <th className="border px-2 py-2 text-center min-w-[60px]">구분</th>
+            <th className="border px-1 sm:px-2 py-2 text-center min-w-[40px] sm:min-w-[60px]">구분</th>
             {dates.map((d) => (
-              <th key={d} className="border px-2 py-2 text-center min-w-[80px]">
+              <th key={d} className="border px-1 sm:px-2 py-2 text-center min-w-[60px] sm:min-w-[80px]">
                 {formatDateHeader(d)}
               </th>
             ))}
-            <th className="border px-3 py-2 text-center min-w-[90px]">주간합계</th>
+            <th className="border px-2 sm:px-3 py-2 text-center min-w-[70px] sm:min-w-[90px]">합계</th>
           </tr>
         </thead>
         <tbody>
           {sorted.map((member) => (
             <tr key={member.user_id} className="hover:bg-gray-50">
-              <td className="border px-3 py-2 font-medium sticky left-0 bg-white z-10">
+              <td className="border px-2 sm:px-3 py-2 font-medium sticky left-0 bg-white z-10">
                 {member.display_name}
               </td>
-              <td className="border px-2 py-2 text-center text-xs text-gray-500">
+              <td className="border px-1 sm:px-2 py-2 text-center text-xs text-gray-500">
                 {MEMBER_TYPE_LABELS[member.member_type] || "-"}
               </td>
               {dates.map((d) => {
                 const day = member.days[d];
                 return (
-                  <td key={d} className="border px-2 py-2 text-center">
+                  <td key={d} className="border px-1 sm:px-2 py-2 text-center">
                     {day ? (
                       <StatusBadge status={day.status} checkIn={day.check_in} size="sm" />
                     ) : (
@@ -74,7 +74,7 @@ export default function AttendanceGrid({ data, dates }: AttendanceGridProps) {
                   </td>
                 );
               })}
-              <td className="border px-3 py-2 text-center font-medium">
+              <td className="border px-2 sm:px-3 py-2 text-center font-medium text-xs sm:text-sm">
                 {formatMinutes(member.week_minutes)}
               </td>
             </tr>

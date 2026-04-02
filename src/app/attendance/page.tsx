@@ -56,40 +56,40 @@ export default function AttendancePage() {
   return (
     <>
       <Navbar />
-      <main className="max-w-6xl mx-auto px-4 py-8 space-y-4">
-        <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold">출석부</h1>
-          <div className="flex items-center gap-2">
+      <main className="max-w-6xl mx-auto px-2 sm:px-4 py-4 sm:py-8 space-y-3 sm:space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <h1 className="text-lg sm:text-xl font-bold">출석부</h1>
+          <div className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
             <button
               onClick={() => setWeekOffset((w) => w - 1)}
-              className="px-3 py-1 border rounded hover:bg-gray-100"
+              className="px-2 sm:px-3 py-1 border rounded hover:bg-gray-100"
             >
-              &lt; 이전주
+              &lt; 이전
             </button>
             <button
               onClick={() => setWeekOffset(0)}
-              className="px-3 py-1 border rounded hover:bg-gray-100"
+              className="px-2 sm:px-3 py-1 border rounded hover:bg-gray-100"
             >
               이번주
             </button>
             <button
               onClick={() => setWeekOffset((w) => w + 1)}
-              className="px-3 py-1 border rounded hover:bg-gray-100"
+              className="px-2 sm:px-3 py-1 border rounded hover:bg-gray-100"
             >
-              다음주 &gt;
+              다음 &gt;
             </button>
           </div>
         </div>
 
-        <div className="flex items-center gap-4 text-xs">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs">
           <span className="flex items-center gap-1">
-            <span className="w-3 h-3 rounded bg-lime-400 inline-block" /> 정상출근
+            <span className="w-3 h-3 rounded bg-lime-400 inline-block" /> 정상
           </span>
           <span className="flex items-center gap-1">
-            <span className="w-3 h-3 rounded bg-green-600 inline-block" /> 10분이내 지각
+            <span className="w-3 h-3 rounded bg-green-600 inline-block" /> 10분이내
           </span>
           <span className="flex items-center gap-1">
-            <span className="w-3 h-3 rounded bg-blue-500 inline-block" /> 출석인정
+            <span className="w-3 h-3 rounded bg-blue-500 inline-block" /> 인정
           </span>
           <span className="flex items-center gap-1">
             <span className="w-3 h-3 rounded bg-red-500 inline-block" /> 지각/결석

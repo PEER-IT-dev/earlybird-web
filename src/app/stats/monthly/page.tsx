@@ -57,9 +57,9 @@ export default function MonthlyStatsPage() {
   return (
     <>
       <Navbar />
-      <main className="max-w-3xl mx-auto px-4 py-8 space-y-6">
+      <main className="max-w-3xl mx-auto px-3 sm:px-4 py-6 sm:py-8 space-y-4 sm:space-y-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold">월간 통계</h1>
+          <h1 className="text-lg sm:text-xl font-bold">월간 통계</h1>
           <Link href="/stats/weekly" className="text-sm text-blue-500 hover:underline">
             &lt; 주간 통계
           </Link>
@@ -76,17 +76,17 @@ export default function MonthlyStatsPage() {
         ) : stats.length === 0 ? (
           <p className="text-gray-400">데이터가 없습니다.</p>
         ) : (
-          <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
-            <table className="w-full text-sm">
+          <div className="bg-white rounded-xl shadow-sm border overflow-x-auto">
+            <table className="w-full text-xs sm:text-sm whitespace-nowrap">
               <thead>
                 <tr className="bg-gray-50 text-gray-600">
-                  <th className="px-4 py-3 text-left">순위</th>
-                  <th className="px-4 py-3 text-left">이름</th>
-                  <th className="px-4 py-3 text-center">구분</th>
-                  <th className="px-4 py-3 text-right">근무시간</th>
-                  <th className="px-4 py-3 text-center">정상</th>
-                  <th className="px-4 py-3 text-center">인정</th>
-                  <th className="px-4 py-3 text-center">지각</th>
+                  <th className="px-2 sm:px-4 py-2 sm:py-3 text-left">#</th>
+                  <th className="px-2 sm:px-4 py-2 sm:py-3 text-left">이름</th>
+                  <th className="px-2 sm:px-4 py-2 sm:py-3 text-center">구분</th>
+                  <th className="px-2 sm:px-4 py-2 sm:py-3 text-right">근무</th>
+                  <th className="px-2 sm:px-4 py-2 sm:py-3 text-center">정상</th>
+                  <th className="px-2 sm:px-4 py-2 sm:py-3 text-center">인정</th>
+                  <th className="px-2 sm:px-4 py-2 sm:py-3 text-center">지각</th>
                 </tr>
               </thead>
               <tbody>
@@ -97,15 +97,15 @@ export default function MonthlyStatsPage() {
                       s.user_id === user?.id ? "bg-green-50 font-semibold" : ""
                     }`}
                   >
-                    <td className="px-4 py-3">{s.rank}</td>
-                    <td className="px-4 py-3">{s.display_name}</td>
-                    <td className="px-4 py-3 text-center text-xs text-gray-500">
+                    <td className="px-2 sm:px-4 py-2 sm:py-3">{s.rank}</td>
+                    <td className="px-2 sm:px-4 py-2 sm:py-3">{s.display_name}</td>
+                    <td className="px-2 sm:px-4 py-2 sm:py-3 text-center text-xs text-gray-500">
                       {MEMBER_TYPE_LABELS[s.member_type] || "-"}
                     </td>
-                    <td className="px-4 py-3 text-right">{formatMinutes(s.total_minutes)}</td>
-                    <td className="px-4 py-3 text-center text-green-600">{s.on_time_days}일</td>
-                    <td className="px-4 py-3 text-center text-blue-500">{s.excused_days}일</td>
-                    <td className="px-4 py-3 text-center text-red-500">{s.fail_days}일</td>
+                    <td className="px-2 sm:px-4 py-2 sm:py-3 text-right">{formatMinutes(s.total_minutes)}</td>
+                    <td className="px-2 sm:px-4 py-2 sm:py-3 text-center text-green-600">{s.on_time_days}</td>
+                    <td className="px-2 sm:px-4 py-2 sm:py-3 text-center text-blue-500">{s.excused_days}</td>
+                    <td className="px-2 sm:px-4 py-2 sm:py-3 text-center text-red-500">{s.fail_days}</td>
                   </tr>
                 ))}
               </tbody>
