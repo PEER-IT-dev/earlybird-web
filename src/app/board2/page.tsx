@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+import { useRouter } from "next/navigation";
+import { apiFetch } from "@/lib/api";
+import { isLoggedIn } from "@/lib/auth";
 
 interface DayData {
   check_in: string | null;
@@ -14,10 +15,16 @@ interface DayData {
 interface MemberRow {
   user_id: string;
   display_name: string;
-  real_name?: string;
   member_type: string;
   days: Record<string, DayData>;
   week_minutes: number;
+}
+
+interface UserInfo {
+  id: string;
+  display_name: string;
+  real_name: string | null;
+  member_type: string | null;
 }
 
 interface WeekGroup {
@@ -83,8 +90,10 @@ function fmtDateShort(dateStr: string) {
   return `${d}(${DAY_NAMES[date.getDay()]})`;
 }
 
-export default function PublicBoard2Page() {
+export default function Board2Page() {
+  const router = useRouter();
   const [data, setData] = useState<MemberRow[]>([]);
+  const [nameMap, setNameMap] = useState<Map<string, string>>(new Map());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -96,6 +105,12 @@ export default function PublicBoard2Page() {
   const weeks = getMonthWeeks(year, month);
   const allDates = weeks.flatMap((w) => w.dates);
   const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+
+  useEffect(() => {
+    if (!isLoggedIn()) {
+      router.replace("/login");
+    }
+  }, [router]);
 
   // 현재 주차 자동 선택
   useEffect(() => {
@@ -113,11 +128,19 @@ export default function PublicBoard2Page() {
       return;
     }
     try {
-      const res = await fetch(
-        `${API_BASE}/api/attendance/public/sheet?start=${dates[0]}&end=${dates[dates.length - 1]}`
-      );
-      if (!res.ok) throw new Error("Failed");
-      setData(await res.json());
+      const [sheetData, users] = await Promise.all([
+        apiFetch<MemberRow[]>(
+          `/api/attendance/public/sheet?start=${dates[0]}&end=${dates[dates.length - 1]}`
+        ),
+        apiFetch<UserInfo[]>("/api/users"),
+      ]);
+      // user_id → real_name || display_name 맵 생성
+      const map = new Map<string, string>();
+      for (const u of users) {
+        map.set(u.id, u.real_name || u.display_name);
+      }
+      setNameMap(map);
+      setData(sheetData);
     } catch {
       setError("출석 데이터를 불러올 수 없습니다.");
       setData([]);
@@ -155,7 +178,6 @@ export default function PublicBoard2Page() {
   const mobileWeek = weeks[safeWeekIdx] || weeks[0];
   const mobileDates = mobileWeek?.dates || [];
 
-  // 주차별 col 시작 위치 (desktop grid)
   let colCursor = 2;
   const weekCols = weeks.map((w) => {
     const start = colCursor;
@@ -321,7 +343,7 @@ export default function PublicBoard2Page() {
                 const typeEmoji = MEMBER_TYPE_EMOJI[member.member_type] || "";
                 const isEven = idx % 2 === 0;
                 const rowNum = idx + 3;
-                const name = member.real_name || member.display_name;
+                const name = nameMap.get(member.user_id) || member.display_name;
                 return [
                   <div
                     key={`name-${member.user_id}`}
@@ -414,7 +436,7 @@ export default function PublicBoard2Page() {
                 const typeEmoji = MEMBER_TYPE_EMOJI[member.member_type] || "";
                 const isEven = idx % 2 === 0;
                 const rowNum = idx + 2;
-                const name = member.real_name || member.display_name;
+                const name = nameMap.get(member.user_id) || member.display_name;
                 return [
                   <div
                     key={`m-name-${member.user_id}`}
