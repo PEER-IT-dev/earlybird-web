@@ -6,7 +6,7 @@ import Navbar from "@/components/Navbar";
 import StatusBadge from "@/components/StatusBadge";
 import { apiFetch } from "@/lib/api";
 import { getUser, isLoggedIn } from "@/lib/auth";
-import { formatMinutes, formatTime, MEMBER_TYPE_LABELS, MEMBER_TYPE_ICONS, isVisibleMemberType } from "@/lib/utils";
+import { formatMinutes, formatTime, MEMBER_TYPE_LABELS, MEMBER_TYPE_ICONS, isVisibleMember } from "@/lib/utils";
 import NicknameModal from "@/components/NicknameModal";
 
 interface MyAttendance {
@@ -56,7 +56,7 @@ export default function DashboardPage() {
       ]);
       const todayStr = new Date().toISOString().split("T")[0];
       setToday(myRecords.find((r) => r.date === todayStr) || null);
-      setTeam(teamData.filter((m) => isVisibleMemberType(m.member_type)));
+      setTeam(teamData.filter((m) => isVisibleMember(m.member_type, m.display_name)));
     } catch {
       // no data
     } finally {

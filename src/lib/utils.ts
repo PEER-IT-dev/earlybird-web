@@ -56,7 +56,19 @@ export const MEMBER_TYPE_ICONS: Record<string, string> = {
 };
 
 const VISIBLE_TYPES = new Set(["earlybird", "super_earlybird", "manager", "leader"]);
+const HIDDEN_NAMES = new Set(["성민", "오로라오로라"]);
 
 export function isVisibleMemberType(memberType: string | null | undefined): boolean {
   return !!memberType && VISIBLE_TYPES.has(memberType);
+}
+
+export function isHiddenName(...names: (string | null | undefined)[]): boolean {
+  return names.some((n) => !!n && HIDDEN_NAMES.has(n));
+}
+
+export function isVisibleMember(
+  memberType: string | null | undefined,
+  ...names: (string | null | undefined)[]
+): boolean {
+  return isVisibleMemberType(memberType) && !isHiddenName(...names);
 }

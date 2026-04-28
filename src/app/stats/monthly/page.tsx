@@ -6,7 +6,7 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import { apiFetch } from "@/lib/api";
 import { isLoggedIn, getUser } from "@/lib/auth";
-import { formatMinutes, MEMBER_TYPE_LABELS, isVisibleMemberType } from "@/lib/utils";
+import { formatMinutes, MEMBER_TYPE_LABELS, isVisibleMember } from "@/lib/utils";
 
 interface Stat {
   rank: number;
@@ -44,7 +44,7 @@ export default function MonthlyStatsPage() {
       const data = await apiFetch<{ year: number; month: number; stats: Stat[] }>(
         "/api/stats/monthly"
       );
-      setStats(data.stats.filter((s) => isVisibleMemberType(s.member_type)));
+      setStats(data.stats.filter((s) => isVisibleMember(s.member_type, s.display_name)));
       setYear(data.year);
       setMonth(data.month);
     } catch {

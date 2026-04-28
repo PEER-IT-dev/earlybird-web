@@ -6,7 +6,7 @@ import Navbar from "@/components/Navbar";
 import AttendanceGrid from "@/components/AttendanceGrid";
 import { apiFetch } from "@/lib/api";
 import { isLoggedIn } from "@/lib/auth";
-import { isVisibleMemberType } from "@/lib/utils";
+import { isVisibleMember } from "@/lib/utils";
 
 export default function AttendancePage() {
   const router = useRouter();
@@ -46,7 +46,7 @@ export default function AttendancePage() {
 
     try {
       const sheet = await apiFetch<any[]>(`/api/attendance/sheet?start=${start}&end=${end}`);
-      setData(sheet.filter((m) => isVisibleMemberType(m.member_type)));
+      setData(sheet.filter((m) => isVisibleMember(m.member_type, m.display_name)));
     } catch {
       setData([]);
     } finally {

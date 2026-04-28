@@ -6,7 +6,7 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import { apiFetch } from "@/lib/api";
 import { isLoggedIn, getUser } from "@/lib/auth";
-import { formatMinutes, MEMBER_TYPE_LABELS, isVisibleMemberType } from "@/lib/utils";
+import { formatMinutes, MEMBER_TYPE_LABELS, isVisibleMember } from "@/lib/utils";
 
 interface Stat {
   rank: number;
@@ -45,7 +45,7 @@ export default function WeeklyStatsPage() {
         week_end: string;
         stats: Stat[];
       }>("/api/stats/weekly");
-      setStats(data.stats.filter((s) => isVisibleMemberType(s.member_type)));
+      setStats(data.stats.filter((s) => isVisibleMember(s.member_type, s.display_name)));
       setWeekStart(data.week_start);
       setWeekEnd(data.week_end);
     } catch {

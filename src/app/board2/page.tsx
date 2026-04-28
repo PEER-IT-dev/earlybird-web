@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api";
 import { isLoggedIn } from "@/lib/auth";
+import { isHiddenName } from "@/lib/utils";
 
 interface DayData {
   check_in: string | null;
@@ -163,7 +164,7 @@ export default function Board2Page() {
 
   const VISIBLE = new Set(["leader", "manager", "super_earlybird", "earlybird"]);
   const sorted = data
-    .filter((m) => VISIBLE.has(m.member_type))
+    .filter((m) => VISIBLE.has(m.member_type) && !isHiddenName(nameMap.get(m.user_id), m.display_name))
     .sort((a, b) => {
       const o: Record<string, number> = { leader: 0, manager: 1, super_earlybird: 2, earlybird: 3 };
       return (o[a.member_type] ?? 5) - (o[b.member_type] ?? 5) || a.display_name.localeCompare(b.display_name);
