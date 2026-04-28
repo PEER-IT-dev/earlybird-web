@@ -54,9 +54,11 @@ export default function AdminPage() {
   const [editDisplayName, setEditDisplayName] = useState("");
   const [loading, setLoading] = useState(true);
   const user = getUser();
+  const canManage =
+    !!user && (user.is_admin || user.member_type === "manager" || user.member_type === "leader");
 
   useEffect(() => {
-    if (!isLoggedIn() || !user?.is_admin) {
+    if (!isLoggedIn() || !canManage) {
       router.replace("/dashboard");
       return;
     }
@@ -92,6 +94,18 @@ export default function AdminPage() {
       setExcuses(data);
     } catch {
       setExcuses([]);
+    }
+  };
+
+  const deactivateMember = async (userId: string, name: string) => {
+    if (!confirm(`${name}님을 탈퇴 처리할까요?\n출석 기록은 보존되지만 더 이상 로그인할 수 없습니다.`)) {
+      return;
+    }
+    try {
+      await apiFetch(`/api/users/${userId}/deactivate`, { method: "POST" });
+      await loadMembers();
+    } catch (err: any) {
+      alert(err.message);
     }
   };
 
@@ -165,13 +179,15 @@ export default function AdminPage() {
       <main className="max-w-4xl mx-auto px-2 sm:px-4 py-4 sm:py-8 space-y-4 sm:space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-lg sm:text-xl font-bold" style={{ color: "#4a4e1c" }}>관리자</h1>
-          <Link
-            href="/admin/meetings"
-            className="cloud-btn text-white text-xs sm:text-sm px-3 sm:px-4 py-2"
-            style={{ background: "#8a8e3a" }}
-          >
-            조회 관리
-          </Link>
+          {user?.is_admin && (
+            <Link
+              href="/admin/meetings"
+              className="cloud-btn text-white text-xs sm:text-sm px-3 sm:px-4 py-2"
+              style={{ background: "#8a8e3a" }}
+            >
+              조회 관리
+            </Link>
+          )}
         </div>
 
         {/* 탭 */}
@@ -179,12 +195,16 @@ export default function AdminPage() {
           <button onClick={() => setTab("members")} className={tabStyle("members")} style={tab === "members" ? { background: "#8a8e3a" } : undefined}>
             멤버
           </button>
-          <button onClick={() => setTab("attendance")} className={tabStyle("attendance")} style={tab === "attendance" ? { background: "#8a8e3a" } : undefined}>
-            출석
-          </button>
-          <button onClick={() => setTab("excuses")} className={tabStyle("excuses")} style={tab === "excuses" ? { background: "#8a8e3a" } : undefined}>
-            사유
-          </button>
+          {user?.is_admin && (
+            <>
+              <button onClick={() => setTab("attendance")} className={tabStyle("attendance")} style={tab === "attendance" ? { background: "#8a8e3a" } : undefined}>
+                출석
+              </button>
+              <button onClick={() => setTab("excuses")} className={tabStyle("excuses")} style={tab === "excuses" ? { background: "#8a8e3a" } : undefined}>
+                사유
+              </button>
+            </>
+          )}
         </div>
 
         {/* 멤버 관리 */}
@@ -269,16 +289,26 @@ export default function AdminPage() {
                           </button>
                         </div>
                       ) : (
-                        <button
-                          onClick={() => {
-                            setEditingMember(m.id);
-                            setEditRealName(m.real_name || "");
-                            setEditDisplayName(m.display_name);
-                          }}
-                          className="text-[10px] sm:text-xs px-2 py-1 rounded border hover:bg-gray-100"
-                        >
-                          수정
-                        </button>
+                        <div className="flex gap-1 justify-center">
+                          <button
+                            onClick={() => {
+                              setEditingMember(m.id);
+                              setEditRealName(m.real_name || "");
+                              setEditDisplayName(m.display_name);
+                            }}
+                            className="text-[10px] sm:text-xs px-2 py-1 rounded border hover:bg-gray-100"
+                          >
+                            수정
+                          </button>
+                          {m.id !== user?.id && (
+                            <button
+                              onClick={() => deactivateMember(m.id, m.real_name || m.display_name)}
+                              className="text-[10px] sm:text-xs px-2 py-1 rounded border border-red-200 text-red-500 hover:bg-red-50"
+                            >
+                              탈퇴
+                            </button>
+                          )}
+                        </div>
                       )}
                     </td>
                   </tr>

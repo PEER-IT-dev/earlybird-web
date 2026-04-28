@@ -23,6 +23,9 @@ export default function Navbar() {
 
   if (!user) return null;
 
+  const canManage =
+    user.is_admin || user.member_type === "manager" || user.member_type === "leader";
+
   return (
     <nav className="bg-white/90 backdrop-blur-sm sticky top-0 z-50 shadow-sm" style={{ borderBottom: "2px solid #e8ebc0" }}>
       <div className="max-w-5xl mx-auto px-2 sm:px-4">
@@ -52,7 +55,7 @@ export default function Navbar() {
                 {item.icon} {item.label}
               </Link>
             ))}
-            {user.is_admin && (
+            {canManage && (
               <Link
                 href="/admin"
                 className={`px-3 py-2 rounded-full text-sm transition-all ${
@@ -109,7 +112,7 @@ export default function Navbar() {
             {item.label}
           </Link>
         ))}
-        {user.is_admin && (
+        {canManage && (
           <Link
             href="/admin"
             className={`flex flex-col items-center py-1.5 px-1 text-[10px] flex-1 ${

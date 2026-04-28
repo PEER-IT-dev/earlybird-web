@@ -56,7 +56,11 @@ export default function DashboardPage() {
       ]);
       const todayStr = new Date().toISOString().split("T")[0];
       setToday(myRecords.find((r) => r.date === todayStr) || null);
-      setTeam(teamData);
+      setTeam(
+        teamData.filter(
+          (m) => m.member_type === "earlybird" || m.member_type === "super_earlybird"
+        )
+      );
     } catch {
       // no data
     } finally {
