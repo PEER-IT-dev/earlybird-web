@@ -161,10 +161,13 @@ export default function Board2Page() {
     return () => clearInterval(interval);
   }, [loadData]);
 
-  const sorted = [...data].sort((a, b) => {
-    const o: Record<string, number> = { leader: 0, manager: 1, super_earlybird: 2, earlybird: 3, member: 4 };
-    return (o[a.member_type] ?? 5) - (o[b.member_type] ?? 5) || a.display_name.localeCompare(b.display_name);
-  });
+  const VISIBLE = new Set(["leader", "manager", "super_earlybird", "earlybird"]);
+  const sorted = data
+    .filter((m) => VISIBLE.has(m.member_type))
+    .sort((a, b) => {
+      const o: Record<string, number> = { leader: 0, manager: 1, super_earlybird: 2, earlybird: 3 };
+      return (o[a.member_type] ?? 5) - (o[b.member_type] ?? 5) || a.display_name.localeCompare(b.display_name);
+    });
 
   const changeMonth = (delta: number) => {
     let m = month + delta, y = year;

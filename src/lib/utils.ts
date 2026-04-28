@@ -54,3 +54,9 @@ export const MEMBER_TYPE_ICONS: Record<string, string> = {
   manager: "💻",
   leader: "👑",
 };
+
+const VISIBLE_TYPES = new Set(["earlybird", "super_earlybird", "manager", "leader"]);
+
+export function isVisibleMemberType(memberType: string | null | undefined): boolean {
+  return !!memberType && VISIBLE_TYPES.has(memberType);
+}
